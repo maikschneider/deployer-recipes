@@ -14,6 +14,18 @@ Include recipes in `deploy.php` file.
 require_once(__DIR__ . '/vendor/blueways/depyloer-recipes/autoload.php');
 ```
 
+## Defaults
+
+This package sets default values for various settings.
+
+|Setting|Value
+|-------|-----
+|web_path|public/|
+|shared_files|.env, .htaccess, LocalConfiguration.php, AdditionalConfiguration.php, PackageStates.php|
+|file_backup_packages|fileadmin, uploads (excluding `_processed_` and `_temp_`)
+
+
+
 ## Recipes
 
 * `db:backup:rsync`
