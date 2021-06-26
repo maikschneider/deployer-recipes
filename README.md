@@ -5,7 +5,7 @@ This repository contains third party recipes that are build on top of [sourcebro
 ## Install
 
 ~~~sh
-composer require blueways/deployer-recipes --dev
+composer require blueways/deployer-recipes
 ~~~
 
 Include recipes in `deploy.php` file.

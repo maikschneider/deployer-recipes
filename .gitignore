@@ -4,3 +4,4 @@ public
 vendor
 composer.lock
 .env
+.dep

@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-set('backup_storage_db_keep', 10);
+set('backup_storage_db_keep', get('backup_storage_db_keep', 10));
 
 task('db:backup:rsync', function () {
 
@@ -24,11 +24,11 @@ task('db:backup:rsync', function () {
 
         // sync db
         if (get('db_storage_path_local')) {
-            runLocally('rsync ' . $include . ' -e \'ssh ' . $port . '\' {{db_storage_path_local}}/* ' . $user . $host . ':{{deploy_path}}/ --exclude="*.*"');
+            runLocally('rsync ' . $include . ' -e \'ssh ' . $port . '\' {{db_storage_path_local}}/* ' . $user . $host . ':{{deploy_path}}/database/ --exclude="*.*"');
         }
 
         // prune
-        $remoteFiles = runLocally('rsync -e \'ssh ' . $port . '\' ' . $user . $host . ':{{deploy_path}}/ | awk \'{ $1 = $2 = $3 = $4 = ""; print substr($0,5); }\'');
+        $remoteFiles = runLocally('rsync -e \'ssh ' . $port . '\' ' . $user . $host . ':{{deploy_path}}/database/ | awk \'{ $1 = $2 = $3 = $4 = ""; print substr($0,5); }\'');
         $remoteFiles = preg_split("/\n/", $remoteFiles);
         $remoteFiles = array_filter($remoteFiles, function ($fileName) {
             return strpos($fileName, 'server=' . get('default_stage'));
@@ -50,10 +50,10 @@ task('db:backup:rsync', function () {
         $tempDir .= '.dep/temp';
         runLocally('mkdir -p ' . $tempDir);
         runLocally('cd ' . $tempDir . ' && touch ' . implode(' ', $filesToDelete));
-        runLocally('rsync -avP -e \'ssh ' . $port . '\' ' . $tempDir . '/* ' . $user . $host . ':{{deploy_path}}/');
+        runLocally('rsync -avP -e \'ssh ' . $port . '\' ' . $tempDir . '/* ' . $user . $host . ':{{deploy_path}}/database/');
         runLocally('rm -f ' . $tempDir . '/*');
         $include = implode('" --include="', $filesToDelete);
-        runLocally('rsync -avP --include="' . $include . '" --exclude "*"  --remove-source-files -e \'ssh ' . $port . '\' ' . $user . $host . ':{{deploy_path}}/ ' . $tempDir . '/ ');
+        runLocally('rsync -avP --include="' . $include . '" --exclude "*"  --remove-source-files -e \'ssh ' . $port . '\' ' . $user . $host . ':{{deploy_path}}/database/ ' . $tempDir . '/ ');
         runLocally('rm -rf ' . $tempDir);
     });
 })->desc('Rsync database backups to remote host');
