@@ -24,7 +24,7 @@
       "autoload.php"
     ]
   },
-  "require-dev": {
+  "require": {
     "sourcebroker/deployer-extended-typo3": "^16.0"
   }
 }

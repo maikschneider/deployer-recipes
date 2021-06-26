@@ -1,6 +1,8 @@
 <?php
 
+// install deployer-extended-typo3
 require_once(__DIR__ . '/vendor/sourcebroker/deployer-loader/autoload.php');
 new \SourceBroker\DeployerExtendedTypo3\Loader();
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__);
+// install own recipes
+require_once(__DIR__ . '/recipe/db_backup_rsync.php');

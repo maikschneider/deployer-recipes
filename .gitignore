@@ -1,2 +1,6 @@
 .idea
 .ddev
+public
+vendor
+composer.lock
+.env
