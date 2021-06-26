@@ -1,0 +1,30 @@
+{
+  "name": "blueways/deployer-recipes",
+  "description": "blueways deployer recipes",
+  "type": "library",
+  "keywords": [
+    "deployer",
+    "recipes",
+    "deploy",
+    "deployment",
+    "rsync"
+  ],
+  "homepage": "https://bitbucket.org/blueways/deployer-recipes",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Maik Schneider",
+      "email": "m.schneider@blueways.de",
+      "homepage": "https://blueways.de",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "autoload.php"
+    ]
+  },
+  "require-dev": {
+    "sourcebroker/deployer-extended-typo3": "^16.0"
+  }
+}
