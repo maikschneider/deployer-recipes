@@ -1,7 +1,9 @@
 <?php
 
+$vendorDir = substr(dirname(dirname(__DIR__)), -6, 6) === 'vendor' ? __DIR__ . '/../../' : __DIR__ . '/vendor/';
+
 // install deployer-extended-typo3
-require_once(__DIR__ . '/vendor/sourcebroker/deployer-loader/autoload.php');
+require_once($vendorDir . 'sourcebroker/deployer-loader/autoload.php');
 new \SourceBroker\DeployerExtendedTypo3\Loader();
 
 // install own recipes

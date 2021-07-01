@@ -19,11 +19,6 @@
       "role": "Developer"
     }
   ],
-  "autoload": {
-    "files": [
-      "autoload.php"
-    ]
-  },
   "require": {
     "sourcebroker/deployer-extended-typo3": "^16.0"
   }
