@@ -20,9 +20,9 @@ This package sets default values for various settings.
 
 |Setting|Value
 |-------|-----
-|web_path|public/|
-|shared_files|.env, .htaccess, LocalConfiguration.php, AdditionalConfiguration.php, PackageStates.php|
-|file_backup_packages|fileadmin, uploads (excluding `_processed_` and `_temp_`)
+|web_path|`public/`|
+|shared_files|`.env`, `.htaccess`, `LocalConfiguration.php`, [AdditionalConfiguration.php](https://gist.github.com/jonaseberle/1ed3b12e645667f2e1228f091fcaaa20), `PackageStates.php`|
+|file_backup_packages|`fileadmin`, uploads (excluding `_processed_` and `_temp_`)
 
 
 
@@ -49,7 +49,7 @@ Rsync file backups to remote host
 ```php
 // set up backup storage
 host('hidrive')
-    ->hostname('blueways-backups@sftp.hidrive.strato.com')
-    ->set('deploy_path', '/users/blueways-backups/MyProject')
+    ->hostname('username@hidrive.strato.com')
+    ->set('deploy_path', '/users/username/MyProject')
     ->roles('backup_storage');
 ```

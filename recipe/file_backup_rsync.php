@@ -12,7 +12,13 @@ task('file:backup:rsync', function () {
         return;
     }
 
-    on(roles('backup_storage'), function ($host) {
+    if (!get('file_backup_packages', false)) {
+        return;
+    }
+
+    $file_backup_path = get('file_backup_path');
+
+    on(roles('backup_storage'), function ($host) use ($file_backup_path) {
 
         $server = $host;
 
@@ -20,51 +26,36 @@ task('file:backup:rsync', function () {
         $port = $server->getPort() ? ' -p' . $server->getPort() : '';
         $user = !$server->getUser() ? '' : $server->getUser() . '@';
 
-        $include = '--include="*server=' . get('default_stage') . '*"';
+        // for every backup package
+        foreach (get('file_backup_packages') as $packageName => $conf) {
 
-        // sync db
-        if (get('db_storage_path_local')) {
-            runLocally('rsync ' . $include . ' -e \'ssh ' . $port . '\' {{db_storage_path_local}}/* ' . $user . $host . ':{{deploy_path}}/ --exclude="*.*"');
-        }
-        // sync media
-        if (get('file_backup_packages')) {
-            runLocally('rsync -e \'ssh ' . $port . '\' {{file_backup_path}}/* ' . $user . $host . ':{{deploy_path}}/');
-        }
+            // sync backups
+            runLocally('rsync -a --include \'' . $packageName . '/\' -e \'ssh ' . $port . '\' ' . $file_backup_path . '/ ' . $user . $host . ':{{deploy_path}}/backups/');
 
-        // prune
-        $remoteFiles = runLocally('rsync -e \'ssh ' . $port . '\' ' . $user . $host . ':{{deploy_path}}/ | awk \'{ $1 = $2 = $3 = $4 = ""; print substr($0,5); }\'');
-        $remoteFiles = preg_split("/\n/", $remoteFiles);
-        $remoteFiles = array_filter($remoteFiles, function ($fileName) {
-            return strpos($fileName, 'server=' . get('default_stage'));
-        });
+            // prune
+            $remoteFiles = runLocally('rsync -a -e \'ssh ' . $port . '\' ' . $user . $host . ':{{deploy_path}}/backups/' . $packageName . '/ | awk \'{ $1 = $2 = $3 = $4 = ""; print substr($0,5); }\'');
+            $remoteFiles = preg_split("/\n/", $remoteFiles);
+            $remoteBackups = array_filter($remoteFiles, function ($fileName) {
+                return strpos($fileName, '.tar.gz', -7);
+            });
+            $filesToDelete = array_splice($remoteBackups, 0, get('backup_storage_media_keep') * -1);
 
-        // db
-        $remoteDbs = array_filter($remoteFiles, function ($fileName) {
-            return strpos($fileName, '.gz', -3);
-        });
-        $filesToDelete = array_splice($remoteDbs, 0, get('backup_storage_db_keep') * -2);
+            // exit if nothing to delete
+            if (!count($filesToDelete)) {
+                return;
+            }
 
-        // media
-        $remoteMedias = array_filter($remoteFiles, function ($fileName) {
-            return strpos($fileName, '.tar', -3);
-        });
-        $filesToDelete = array_merge($filesToDelete,
-            array_splice($remoteMedias, 0, get('backup_storage_media_keep') * -1));
-
-        // exit if nothing to delete
-        if (!count($filesToDelete)) {
-            return;
-        }
-
-        // workaround to delete files via rsync: create empty files locally, override storage files, clean dir, rsync back with --remove-source files
-        $tempDir = !empty($_ENV['IS_DDEV_PROJECT']) ? '' : get('deploy_path') . '/';
-        $tempDir .= '.dep/temp';
-        runLocally('mkdir -p ' . $tempDir);
-        runLocally('cd ' . $tempDir . ' && touch ' . implode(' ', $filesToDelete));
-        runLocally('rsync -avP -e \'ssh ' . $port . '\' ' . $tempDir . '/* ' . $user . $host . ':{{deploy_path}}/');
-        runLocally('rm -f ' . $tempDir . '/*');
-        $include = implode('" --include="', $filesToDelete);
-        runLocally('rsync -avP --include="' . $include . '" --exclude "*"  --remove-source-files -e \'ssh ' . $port . '\' ' . $user . $host . ':{{deploy_path}}/ ' . $tempDir . '/ ');
-        runLocally('rm -rf ' . $tempDir);
+            // workaround to delete files via rsync: create empty files locally, override storage files, clean dir, rsync back with --remove-source files
+            $tempDir = !empty($_ENV['IS_DDEV_PROJECT']) ? '' : get('deploy_path') . '/';
+            $tempDir .= '.dep/temp';
+            runLocally('mkdir -p ' . $tempDir);
+            runLocally('cd ' . $tempDir . ' && touch ' . implode(' ', $filesToDelete));
+            runLocally('rsync -avP -e \'ssh ' . $port . '\' ' . $tempDir . '/* ' . $user . $host . ':{{deploy_path}}/backups/' . $packageName);
+            runLocally('rm -f ' . $tempDir . '/*');
+            $include = implode('" --include="', $filesToDelete);
+            runLocally('rsync -avP --include="' . $include . '" --exclude "*"  --remove-source-files -e \'ssh ' . $port . '\' ' . $user . $host . ':{{deploy_path}}/backups/' . $packageName . '/ ' . $tempDir . '/ ');
+            runLocally('rm -rf ' . $tempDir);
+        };
     });
-})->desc('Rsync database backups to remote host');
+})->
+desc('Rsync database backups to remote host');
