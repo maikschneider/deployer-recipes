@@ -8,7 +8,7 @@ task('file:backup:rsync', function () {
 
     if (!empty(get('argument_stage'))) {
         $activePath = get('deploy_path') . '/' . (test('[ -L {{deploy_path}}/release ]') ? 'release' : 'current');
-        run('cd ' . $activePath . ' && {{bin/php}} {{bin/deployer}} backups:rsync ' . (input()->getOption('options') ? '--options=' . input()->getOption('options') : ''));
+        run('cd ' . $activePath . ' && {{bin/php}} {{bin/deployer}} file:backup:rsync ' . (input()->getOption('options') ? '--options=' . input()->getOption('options') : ''));
         return;
     }
 
