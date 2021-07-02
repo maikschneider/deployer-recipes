@@ -14,7 +14,22 @@ Include recipes in `deploy.php` file.
 require_once(__DIR__ . '/vendor/blueways/depyloer-recipes/autoload.php');
 ```
 
-Note: As long as the [pull request](https://github.com/sourcebroker/deployer-extended/pull/13) that fixes local backups is not merged, this package uses a fork of `sourcebroker/deployer-extended@^16.0`.
+Note: As long as the [pull request](https://github.com/sourcebroker/deployer-extended/pull/13) that fixes local backups is not merged, this package needs to use a fork of `sourcebroker/deployer-extended@^16.0`. Add the fork to your main `composer.json`:
+
+```json
+{
+   "repositories": [
+      {
+         "type": "git",
+         "url": "https://github.com/maikschneider/deployer-extended"
+      }
+   ],
+   "require": {
+      "blueways/deployer-recipes": "^1.0",
+      "sourcebroker/deployer-extended": "dev-hotfix/local-backup as 16.1.0"
+   }
+}
+```
 
 ## Defaults
 
