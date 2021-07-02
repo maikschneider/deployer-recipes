@@ -22,7 +22,7 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/maikschneider/deployer-extended"
+      "url": "https://github.com/maikschneider/deployer-extended.git"
     }
   ],
   "require": {

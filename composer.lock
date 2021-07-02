@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cabca967ba9d75d70765bbdf63a1fbda",
+    "content-hash": "40d7c552c0b8f94671fac8c1eed9b953",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2045,15 +2045,15 @@
             "version": "dev-hotfix/local-backup",
             "source": {
                 "type": "git",
-                "url": "https://github.com/maikschneider/deployer-extended",
-                "reference": "19cf91f7d3f18c1e68398c48ade7b1cb9014edea"
+                "url": "https://github.com/maikschneider/deployer-extended.git",
+                "reference": "69cdb733ce6271a299e1eccbf407c52a03976002"
             },
             "require": {
                 "deployer/dist": "^6.4.0",
                 "sourcebroker/deployer-instance": "^4.0.0"
             },
             "replace": {
-                "sourcebroker/deployer-extended": "16.1.0"
+                "sourcebroker/deployer-extended": "self.version"
             },
             "type": "library",
             "autoload": {
@@ -2078,7 +2078,7 @@
             "keywords": [
                 "deployer"
             ],
-            "time": "2021-07-02T11:55:59+00:00"
+            "time": "2021-07-02T12:06:04+00:00"
         },
         {
             "name": "sourcebroker/deployer-extended-database",
