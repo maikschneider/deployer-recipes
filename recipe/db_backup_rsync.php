@@ -46,8 +46,7 @@ task('db:backup:rsync', function () {
         }
 
         // workaround to delete files via rsync: create empty files locally, override storage files, clean dir, rsync back with --remove-source files
-        $tempDir = !empty($_ENV['IS_DDEV_PROJECT']) ? '' : get('deploy_path') . '/';
-        $tempDir .= '.dep/temp';
+        $tempDir = '.dep/temp';
         runLocally('mkdir -p ' . $tempDir);
         runLocally('cd ' . $tempDir . ' && touch ' . implode(' ', $filesToDelete));
         runLocally('rsync -avP -e \'ssh ' . $port . '\' ' . $tempDir . '/* ' . $user . $host . ':{{deploy_path}}/database/');

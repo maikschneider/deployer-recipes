@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-set('backup_storage_media_keep', get('backup_storage_media_keep', 2));
+set('backup_storage_media_keep', get('backup_storage_media_keep', 1));
 
 task('file:backup:rsync', function () {
 
@@ -46,8 +46,7 @@ task('file:backup:rsync', function () {
             }
 
             // workaround to delete files via rsync: create empty files locally, override storage files, clean dir, rsync back with --remove-source files
-            $tempDir = !empty($_ENV['IS_DDEV_PROJECT']) ? '' : get('deploy_path') . '/';
-            $tempDir .= '.dep/temp';
+            $tempDir = '.dep/temp';
             runLocally('mkdir -p ' . $tempDir);
             runLocally('cd ' . $tempDir . ' && touch ' . implode(' ', $filesToDelete));
             runLocally('rsync -avP -e \'ssh ' . $port . '\' ' . $tempDir . '/* ' . $user . $host . ':{{deploy_path}}/backups/' . $packageName);

@@ -58,8 +58,10 @@ Rsync file backups to remote host
 
 ## Settings
 
-* `backup_storage_db_keep`, default 5
-* `backup_storage_file_keep`, default 2
+|Setting|Value
+|---|---
+|backup_storage_db_keep| `10`
+|backup_storage_file_keep| `1`
 
 ## Examples
 
