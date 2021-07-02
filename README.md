@@ -1,6 +1,6 @@
 ## blueways Deployer Recipes
 
-This repository contains third party recipes that are build on top of [sourcebroker/deployer-extended-typo3](https://github.com/sourcebroker/deployer-extended-typo3).
+This repository contains third party recipes that are build on top of [sourcebroker/deployer-extended-typo3](https://github.com/sourcebroker/deployer-extended-typo3). This package sets default deployer values for a common TYPO3 base extension installation.
 
 ## Install
 
@@ -14,7 +14,7 @@ Include recipes in `deploy.php` file.
 require_once(__DIR__ . '/vendor/blueways/depyloer-recipes/autoload.php');
 ```
 
-Note: As long as the [pull request](https://github.com/sourcebroker/deployer-extended/pull/13) that fixes local backups is not merged, this package needs to use a fork of `sourcebroker/deployer-extended@^16.0`. Add the fork to your main `composer.json`:
+Note: As long as the [pull request](https://github.com/sourcebroker/deployer-extended/pull/13) that fixes local backups is not merged, this package needs to use a fork of `sourcebroker/deployer-extended@^16.0`. Register the fork in your main `composer.json`:
 
 ```json
 {
@@ -122,4 +122,4 @@ Rsync file backups to remote host
    
 3. Register a new scheduler
 
-    ![pipeline example](Documentation/Images/bitbucket.png)
+    ![pipeline example](https://bitbucket.org/blueways/deployer-recipes/raw/master/Documentation/Images/bitbucket.png)
