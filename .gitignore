@@ -2,7 +2,6 @@
 .ddev
 public
 vendor
-composer.lock
 .env
 .dep
 deploy.php
