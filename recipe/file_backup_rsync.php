@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-set('backup_storage_media_keep', get('backup_storage_media_keep', 1));
+set('backup_storage_media_keep', get('backup_storage_media_keep', 3));
 
 task('file:backup:rsync', function () {
 

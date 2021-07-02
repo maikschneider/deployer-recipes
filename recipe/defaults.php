@@ -24,3 +24,5 @@ set('file_backup_packages', [
         ]
     ]
 ]);
+
+set('file_backup_keep', 1);
