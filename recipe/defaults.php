@@ -4,14 +4,6 @@ namespace Deployer;
 
 set('web_path', 'public/');
 
-set('shared_files', [
-    '.env',
-    'public/.htaccess',
-    'public/typo3conf/LocalConfiguration.php',
-    'public/typo3conf/AdditionalConfiguration.php',
-    'public/typo3conf/PackageStates.php'
-]);
-
 set('file_backup_packages', [
     'media' => [
         [

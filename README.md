@@ -38,7 +38,6 @@ This package sets default values for various settings.
 |Setting|Value
 |-------|-----
 |web_path|`public/`|
-|shared_files|`.env`, `.htaccess`, `LocalConfiguration.php`, [AdditionalConfiguration.php](https://gist.github.com/jonaseberle/1ed3b12e645667f2e1228f091fcaaa20), `PackageStates.php`|
 |file_backup_packages|`fileadmin`, `uploads` (excluding `_processed_` and `_temp_`)
 |file_backup_keep|`1`
 
