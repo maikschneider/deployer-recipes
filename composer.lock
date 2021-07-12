@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40d7c552c0b8f94671fac8c1eed9b953",
+    "content-hash": "13fe205f0a14d816aebef5f66b6be877",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -256,6 +256,68 @@
                 "source": "https://github.com/deployphp/deployer"
             },
             "time": "2020-04-25T18:48:50+00:00"
+        },
+        {
+            "name": "deployer/recipes",
+            "version": "6.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deployphp/recipes.git",
+                "reference": "84b3229c518c094a950e1fe785b7b8f9598770fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deployphp/recipes/zipball/84b3229c518c094a950e1fe785b7b8f9598770fe",
+                "reference": "84b3229c518c094a950e1fe785b7b8f9598770fe",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~7.0"
+            },
+            "replace": {
+                "deployer/recipes": "self.version"
+            },
+            "require-dev": {
+                "deployer/deployer": "^6.3"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Medvedev",
+                    "email": "anton@medv.io"
+                }
+            ],
+            "description": "3rd party deployer recipes",
+            "homepage": "https://github.com/deployphp/recipes",
+            "keywords": [
+                "cachetool",
+                "cloudflare",
+                "deploy",
+                "deployer",
+                "deployment",
+                "hipchat",
+                "newrelic",
+                "rabbit",
+                "recipes",
+                "sentry",
+                "slack",
+                "yarn"
+            ],
+            "support": {
+                "issues": "https://github.com/deployphp/recipes/issues",
+                "source": "https://github.com/deployphp/recipes"
+            },
+            "abandoned": true,
+            "time": "2019-06-27T06:47:18+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1313,16 +1375,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.10.5",
+            "version": "v4.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "4432ba399e47c66624bc73c8c0f811e5c109576f"
+                "reference": "fe14cf3672a149364fb66dfe11bf6549af899f94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4432ba399e47c66624bc73c8c0f811e5c109576f",
-                "reference": "4432ba399e47c66624bc73c8c0f811e5c109576f",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/fe14cf3672a149364fb66dfe11bf6549af899f94",
+                "reference": "fe14cf3672a149364fb66dfe11bf6549af899f94",
                 "shasum": ""
             },
             "require": {
@@ -1363,9 +1425,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.10.5"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.11.0"
             },
-            "time": "2021-05-03T19:11:20+00:00"
+            "time": "2021-07-03T13:36:55+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -2046,7 +2108,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/maikschneider/deployer-extended.git",
-                "reference": "69cdb733ce6271a299e1eccbf407c52a03976002"
+                "reference": "207c1b08d5ec20194603266861100bc549694c09"
             },
             "require": {
                 "deployer/dist": "^6.4.0",
@@ -2078,7 +2140,7 @@
             "keywords": [
                 "deployer"
             ],
-            "time": "2021-07-02T12:06:04+00:00"
+            "time": "2021-07-02T14:10:41+00:00"
         },
         {
             "name": "sourcebroker/deployer-extended-database",
@@ -2178,17 +2240,11 @@
         },
         {
             "name": "sourcebroker/deployer-extended-typo3",
-            "version": "16.0.0",
+            "version": "dev-languageUpdate",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sourcebroker/deployer-extended-typo3.git",
-                "reference": "9192bb8a0e10071b38b1edffaee7e3b54c7f9487"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sourcebroker/deployer-extended-typo3/zipball/9192bb8a0e10071b38b1edffaee7e3b54c7f9487",
-                "reference": "9192bb8a0e10071b38b1edffaee7e3b54c7f9487",
-                "shasum": ""
+                "url": "https://github.com/maikschneider/deployer-extended-typo3.git",
+                "reference": "62e94d38a3ba939c105e3b942ab238f574158d73"
             },
             "require": {
                 "deployer/dist": "~6.8.0",
@@ -2212,7 +2268,6 @@
                     "SourceBroker\\DeployerExtendedTypo3\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2228,14 +2283,10 @@
             ],
             "description": "Deployment tool for TYPO3.",
             "keywords": [
-                "deployer",
-                "typo3"
+                "TYPO3",
+                "deployer"
             ],
-            "support": {
-                "issues": "https://github.com/sourcebroker/deployer-extended-typo3/issues",
-                "source": "https://github.com/sourcebroker/deployer-extended-typo3/tree/16.0.0"
-            },
-            "time": "2020-12-30T21:33:49+00:00"
+            "time": "2021-07-12T10:57:31+00:00"
         },
         {
             "name": "sourcebroker/deployer-instance",
@@ -5907,10 +5958,17 @@
             "version": "dev-hotfix/local-backup",
             "alias": "16.1.0",
             "alias_normalized": "16.1.0.0"
+        },
+        {
+            "package": "sourcebroker/deployer-extended-typo3",
+            "version": "dev-languageUpdate",
+            "alias": "16.0.0",
+            "alias_normalized": "16.0.0.0"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "sourcebroker/deployer-extended-typo3": 20,
         "sourcebroker/deployer-extended": 20
     },
     "prefer-stable": false,

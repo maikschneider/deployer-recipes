@@ -23,10 +23,15 @@
     {
       "type": "git",
       "url": "https://github.com/maikschneider/deployer-extended.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/maikschneider/deployer-extended-typo3.git"
     }
   ],
   "require": {
-    "sourcebroker/deployer-extended-typo3": "16.0.0",
+    "deployer/recipes": "6.2.2",
+    "sourcebroker/deployer-extended-typo3": "dev-languageUpdate as 16.0.0",
     "sourcebroker/deployer-extended": "dev-hotfix/local-backup as 16.1.0"
   }
 }
