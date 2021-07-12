@@ -4,6 +4,8 @@ namespace Deployer;
 
 set('web_path', 'public/');
 
+set('composer_channel', 2);
+
 set('file_backup_packages', [
     'media' => [
         [
