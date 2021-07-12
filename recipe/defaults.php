@@ -28,3 +28,14 @@ task('slack:notify:failure')->onStage('production');
 before('deploy', 'slack:notify');
 after('success', 'slack:notify:success');
 after('deploy:failed', 'slack:notify:failure');
+
+set('branch', 'master');
+
+set('branch_detect_to_deploy', true);
+
+set('db_dumpclean_keep', [
+    'production' => 10,
+    '*' => 2
+]);
+
+task('deploy:check_branch_local', function(){});
