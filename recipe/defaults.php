@@ -27,4 +27,4 @@ task('slack:notify')->onStage('production');
 task('slack:notify:failure')->onStage('production');
 before('deploy', 'slack:notify');
 after('success', 'slack:notify:success');
-after('failure', 'slack:notify:failure');
+after('deploy:failed', 'slack:notify:failure');
