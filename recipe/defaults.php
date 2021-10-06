@@ -2,6 +2,12 @@
 
 namespace Deployer;
 
+// Read database credentials from bin/typo3cms command. see: https://github.com/sourcebroker/deployer-extended-typo3/discussions/7
+set('driver_typo3cms', true);
+
+// always run language update
+before('deploy:symlink', 'typo3cms:language:update');
+
 set('web_path', 'public/');
 
 set('composer_channel', 2);
