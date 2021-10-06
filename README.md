@@ -2,6 +2,8 @@
 
 This repository contains third party recipes that are build on top of [sourcebroker/deployer-extended-typo3](https://github.com/sourcebroker/deployer-extended-typo3). This package sets default deployer values for a common TYPO3 base extension installation.
 
+This Readme contains examples for configuring a TYPO3 base extension for easy deployment.
+
 ## Install
 
 ~~~sh
@@ -64,6 +66,101 @@ Rsync file backups to remote host
 |backup_storage_file_keep| `3`
 
 ## Examples
+
+### Configuration files
+
+Files to put in git:
+
+* public/.htaccess
+* public/typo3conf/LocalConfiguration.php (with production settings)
+* .env (overrides production settings)
+* public/typo3conf/AdditionalConfiguration.php (sets Conf vars from .env)
+
+
+#### .env
+
+This `.env` file contains typical ddev settings, that would have been set through `AdditionalConfiguration.php`.
+
+```yaml
+TYPO3_CONTEXT='Development/Local'
+INSTANCE='local'
+
+TYPO3_CONF_VARS__DB__Connections__Default__dbname='db'
+TYPO3_CONF_VARS__DB__Connections__Default__host='db'
+TYPO3_CONF_VARS__DB__Connections__Default__password='db'
+TYPO3_CONF_VARS__DB__Connections__Default__port='3306'
+TYPO3_CONF_VARS__DB__Connections__Default__user='db'
+
+TYPO3_CONF_VARS__BE__debug='true'
+TYPO3_CONF_VARS__BE__compressionLevel=0
+
+TYPO3_CONF_VARS__FE__debug='true'
+TYPO3_CONF_VARS__FE__compressionLevel=0
+TYPO3_CONF_VARS__FE__processor_path='/usr/bin'
+TYPO3_CONF_VARS__FE__processor_path_lzw='/usr/bin'
+
+TYPO3_CONF_VARS__MAIL__transport='smtp'
+TYPO3_CONF_VARS__MAIL__transport_smtp_server='localhost:1025'
+TYPO3_CONF_VARS__MAIL__transport_sendmail_command='/usr/local/bin/mailhog sendmail test@example.org --smtp-addr 127.0.0.1:1025'
+
+TYPO3_CONF_VARS__GFX__processor='/usr/bin/'
+TYPO3_CONF_VARS__GFX__processor='/usr/bin/'
+
+TYPO3_CONF_VARS__SYS__trustedHostsPattern='.*.*'
+TYPO3_CONF_VARS__SYS__devIPmask='*'
+TYPO3_CONF_VARS__SYS__displayErrors=1
+TYPO3_CONF_VARS__SYS__exceptionalErrors=12290
+TYPO3_CONF_VARS__SYS__sitename='Teleport DDEV'
+```
+
+#### AdditionalConfiguration.php
+
+```php
+<?php
+
+/**
+ * Parse environment variables into PHP global variables. Any '__' in a key will be interpreted as 'next array level'.
+ * An example would be: TYPO3_CONF_VARS__DB__Connections__Default__dbname=some_db
+ * Numeric values are converted to integers.
+ *
+ * @param array<string,string> $from the array which shall be watched for keys that are matching $allowedVariables
+ * @param string[] $allowedVariables the names of variables in $GLOBALS that shall be imported
+ */
+function setGlobalsFromStrings(array $from, array $allowedVariables)
+{
+    foreach ($from as $k => $v) {
+        $keyArr = explode('__', $k);
+        if (in_array($variable = array_shift($keyArr), $allowedVariables)) {
+            $finalKey = array_pop($keyArr);
+            for ($level = &$GLOBALS[$variable]; $nextLevel = array_shift($keyArr);) {
+                if (!isset($level[$nextLevel])) {
+                    $level[$nextLevel] = [];
+                }
+                $level = &$level[$nextLevel];
+            }
+            if ($v === 'bool(false)') {
+                $v = false;
+            } elseif ($v === 'bool(true)') {
+                $v = true;
+            } elseif (is_numeric($v)) {
+                $v = (int)$v;
+            }
+
+            $level[$finalKey] = $v;
+        }
+    }
+}
+
+/**
+ * Sets environment variables from the shell environment of the user (e.g. used with docker --environment=), from
+ * webserver's virtual host config, .htaccess (SetEnv), /etc/profile, .profile, .bashrc, ...
+ * When a .env file and the composer package helhum/dotenv-connector is present, the values from .env are also present
+ * in the environment at this stage.
+ */
+setGlobalsFromStrings($_SERVER, ['TYPO3_CONF_VARS']);
+
+```
+
 
 ### Auto-Backup
 
