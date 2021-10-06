@@ -13,3 +13,4 @@ require_once($vendorDir . 'deployer/recipes/recipe/slack.php');
 require_once(__DIR__ . '/recipe/defaults.php');
 require_once(__DIR__ . '/recipe/db_backup_rsync.php');
 require_once(__DIR__ . '/recipe/file_backup_rsync.php');
+require_once(__DIR__ . '/recipe/file_backup.php');

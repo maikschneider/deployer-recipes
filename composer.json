@@ -19,15 +19,8 @@
       "role": "Developer"
     }
   ],
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/maikschneider/deployer-extended.git"
-    }
-  ],
   "require": {
     "deployer/recipes": "6.2.2",
-    "sourcebroker/deployer-extended-typo3": "16.1.0",
-    "sourcebroker/deployer-extended": "dev-hotfix/local-backup as 16.1.0"
+    "sourcebroker/deployer-extended-typo3": "16.1.0"
   }
 }
