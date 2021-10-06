@@ -10,12 +10,6 @@ This Readme contains examples for configuring a TYPO3 base extension for easy de
 composer require blueways/deployer-recipes
 ~~~
 
-Include recipes in `deploy.php` file.
-
-```php
-require_once(__DIR__ . '/vendor/blueways/depyloer-recipes/autoload.php');
-```
-
 Note: As long as the [pull request](https://github.com/sourcebroker/deployer-extended/pull/13) that fixes local backups is not merged, this package needs to use a fork of `sourcebroker/deployer-extended@^16.0`. Register the fork in your main `composer.json`:
 
 ```json
@@ -32,6 +26,56 @@ Note: As long as the [pull request](https://github.com/sourcebroker/deployer-ext
    }
 }
 ```
+
+## deploy.php
+
+Create a ```deploy.php``` in your project root. This is a simple configuration file for deploying to Mittwald hosts:
+
+```php
+<?php
+
+namespace Deployer;
+
+require_once(__DIR__ . '/vendor/blueways/deployer-recipes/autoload.php');
+
+set('repository', 'git@bitbucket.org:blueways/bw_myext.git');
+
+host('staging')
+    ->hostname('p590044.mittwaldserver.info')
+    ->stage('staging')
+    ->user('p590044')
+    ->set('branch', 'master')
+    ->set('public_urls', ['https://staging.myext.de'])
+    ->set('http_user', 'p590044')
+    ->set('writable_mode', 'chmod')
+    ->set('bin/composer', '/usr/local/bin/composer')
+    ->set('bin/php', '/usr/local/bin/php')
+    ->set('deploy_path', '/home/www/p590044/html/typo3-staging');
+```
+
+## composer.json
+
+You have to add some lines to your ```composer.json``` in order to read the Conf vars on the fly and add the symlink to the extension on every deploy.
+
+```json
+  {
+   "extra": {
+      "helhum/dotenv-connector": {
+         "env-file": ".env",
+         "adapter": "Helhum\\DotEnvConnector\\Adapter\\SymfonyDotEnv"
+      }
+   },
+   "scripts": {
+      "typo3-cms-scripts": [
+         "ln -sfn ../../../ public/typo3conf/ext/bw_myext"
+      ],
+      "post-autoload-dump": [
+         "@typo3-cms-scripts"
+      ]
+   }
+}
+```
+
 
 ## Defaults
 
@@ -71,10 +115,10 @@ Rsync file backups to remote host
 
 Files to put in git:
 
-* public/.htaccess
-* public/typo3conf/LocalConfiguration.php (with production settings)
-* .env (overrides production settings)
-* public/typo3conf/AdditionalConfiguration.php (sets Conf vars from .env)
+* ```public/.htaccess```
+* ```public/typo3conf/LocalConfiguration.php``` (with production settings)
+* ```.env``` (overrides production settings)
+* ```public/typo3conf/AdditionalConfiguration.php``` (sets Conf vars from .env)
 
 
 #### .env
@@ -110,7 +154,7 @@ TYPO3_CONF_VARS__SYS__trustedHostsPattern='.*.*'
 TYPO3_CONF_VARS__SYS__devIPmask='*'
 TYPO3_CONF_VARS__SYS__displayErrors=1
 TYPO3_CONF_VARS__SYS__exceptionalErrors=12290
-TYPO3_CONF_VARS__SYS__sitename='Teleport DDEV'
+TYPO3_CONF_VARS__SYS__sitename='MY SITE DDEV'
 ```
 
 #### AdditionalConfiguration.php
