@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "507c87cd3b62eaf773b56d1165813db7",
+    "content-hash": "dd94253437fdd1a2f111e21780ff8a86",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2299,18 +2299,21 @@
         },
         {
             "name": "sourcebroker/deployer-extended",
-            "version": "dev-hotfix/local-backup",
+            "version": "16.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/maikschneider/deployer-extended.git",
-                "reference": "207c1b08d5ec20194603266861100bc549694c09"
+                "url": "https://github.com/sourcebroker/deployer-extended.git",
+                "reference": "ad9cedae01235e1a4f98d988eb619b1c4c2f9149"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sourcebroker/deployer-extended/zipball/ad9cedae01235e1a4f98d988eb619b1c4c2f9149",
+                "reference": "ad9cedae01235e1a4f98d988eb619b1c4c2f9149",
+                "shasum": ""
             },
             "require": {
                 "deployer/dist": "^6.4.0",
                 "sourcebroker/deployer-instance": "^4.0.0"
-            },
-            "replace": {
-                "sourcebroker/deployer-extended": "self.version"
             },
             "type": "library",
             "autoload": {
@@ -2318,6 +2321,7 @@
                     "SourceBroker\\DeployerExtended\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2335,7 +2339,11 @@
             "keywords": [
                 "deployer"
             ],
-            "time": "2021-07-02T14:10:41+00:00"
+            "support": {
+                "issues": "https://github.com/sourcebroker/deployer-extended/issues",
+                "source": "https://github.com/sourcebroker/deployer-extended/tree/16.1.0"
+            },
+            "time": "2021-03-21T13:30:11+00:00"
         },
         {
             "name": "sourcebroker/deployer-extended-database",
@@ -2578,6 +2586,50 @@
                 "source": "https://github.com/sourcebroker/deployer-loader/tree/2.0.1"
             },
             "time": "2021-06-20T16:13:58+00:00"
+        },
+        {
+            "name": "spooner/deployer-information",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.spooner.io/spooner/deployer_information/",
+                "reference": "2030b5dad43f5ec969c05d75a3a3ce2dc0297a90"
+            },
+            "require": {
+                "php": "^7.2",
+                "typo3/cms-core": "^8.7 || ^9.5 || ^10 || ^11"
+            },
+            "type": "typo3-cms-extension",
+            "extra": {
+                "typo3/cms": {
+                    "extension-key": "deployer_information"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SpoonerWeb\\DeployerInformation\\": "Classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Löffler",
+                    "email": "loeffler@spooner-web.de",
+                    "homepage": "https://spooner-web.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Show information about the last deployment in the TYPO3 system information toolbar item",
+            "keywords": [
+                "deployer",
+                "extension",
+                "toolbar",
+                "typo3"
+            ],
+            "time": "2021-08-19T15:06:44+00:00"
         },
         {
             "name": "symfony/cache",
@@ -6437,18 +6489,9 @@
         }
     ],
     "packages-dev": [],
-    "aliases": [
-        {
-            "package": "sourcebroker/deployer-extended",
-            "version": "dev-hotfix/local-backup",
-            "alias": "16.1.0",
-            "alias_normalized": "16.1.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "sourcebroker/deployer-extended": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

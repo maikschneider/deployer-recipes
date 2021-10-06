@@ -21,6 +21,7 @@
   ],
   "require": {
     "deployer/recipes": "6.2.2",
-    "sourcebroker/deployer-extended-typo3": "16.1.0"
+    "sourcebroker/deployer-extended-typo3": "16.1.0",
+    "spooner/deployer-information": "1.2.1"
   }
 }
