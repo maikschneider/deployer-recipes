@@ -4,30 +4,36 @@ This repository contains third party recipes that are build on top of [sourcebro
 
 This Readme contains examples for configuring a TYPO3 base extension for easy deployment.
 
-## Install
+## 1. Install
 
 ~~~sh
 composer require blueways/deployer-recipes
 ~~~
 
-Note: As long as the [pull request](https://github.com/sourcebroker/deployer-extended/pull/13) that fixes local backups is not merged, this package needs to use a fork of `sourcebroker/deployer-extended@^16.0`. Register the fork in your main `composer.json`:
+## 2. Adjust composer.json
+
+You have to add some lines to your ```composer.json``` in order to read the Conf vars on the fly and add the symlink to the extension on every deploy.
 
 ```json
-{
-   "repositories": [
-      {
-         "type": "git",
-         "url": "https://github.com/maikschneider/deployer-extended"
+  {
+   "extra": {
+      "helhum/dotenv-connector": {
+         "env-file": ".env",
+         "adapter": "Helhum\\DotEnvConnector\\Adapter\\SymfonyDotEnv"
       }
-   ],
-   "require": {
-      "blueways/deployer-recipes": "^1.0",
-      "sourcebroker/deployer-extended": "dev-hotfix/local-backup as 16.1.0"
+   },
+   "scripts": {
+      "typo3-cms-scripts": [
+         "ln -sfn ../../../ public/typo3conf/ext/bw_myext"
+      ],
+      "post-autoload-dump": [
+         "@typo3-cms-scripts"
+      ]
    }
 }
 ```
 
-## deploy.php
+## 3. Create deploy.php
 
 Create a ```deploy.php``` in your project root. This is a simple configuration file for deploying to Mittwald hosts:
 
@@ -53,29 +59,52 @@ host('staging')
     ->set('deploy_path', '/home/www/p590044/html/typo3-staging');
 ```
 
-## composer.json
+## 4. Create AdditinalConfiguration.php
 
-You have to add some lines to your ```composer.json``` in order to read the Conf vars on the fly and add the symlink to the extension on every deploy.
+Add [this file](Documentation/AdditionalConfiguration.php) to `public/typo3conf/` in order to parse TYPO3_CONF_VARs from environment variables.
 
-```json
-  {
-   "extra": {
-      "helhum/dotenv-connector": {
-         "env-file": ".env",
-         "adapter": "Helhum\\DotEnvConnector\\Adapter\\SymfonyDotEnv"
-      }
-   },
-   "scripts": {
-      "typo3-cms-scripts": [
-         "ln -sfn ../../../ public/typo3conf/ext/bw_myext"
-      ],
-      "post-autoload-dump": [
-         "@typo3-cms-scripts"
-      ]
-   }
-}
+## 5. Create .env
+
+Put this [.env](Documentation/.env) file in your project root. It contains typical ddev settings, that would have been set through `AdditionalConfiguration.php`. These settings override the production settings of TYPO3.
+
+## 6. Add files to git
+
+Files to put in git:
+
+* ```public/.htaccess```
+* ```public/typo3conf/LocalConfiguration.php``` (with production settings)
+* ```.env``` (overrides production settings)
+* ```public/typo3conf/AdditionalConfiguration.php``` (sets Conf vars from .env)
+* ```public/typo3conf/PackageStates.php```
+
+## 7. Run
+
+Make sure to run the ```dep``` command from within the ddev container, e.g. add an alias to your ```~/.bashrc``` or ```~/.zshrc```:
+
+```
+alias dep="ddev exec vendor/bin/dep"
 ```
 
+To create the folder structure on the remote host, run:
+
+```
+dep deploy:prepare staging
+```
+
+Now you can create your first deployment with
+
+```
+dep deploy staging
+```
+
+This will checkout the repository on the remote host and create a release folder. You need to adjust the database credentials. To do this, ssh to the host and replace the `.env file` with [this one](Documentation/.env.mittwald) (rename it).
+
+```
+dep ssh staging
+# make sure, you are in the /release, /current or /shared dir
+> vim .env
+```
+Exit and try again. Now there should be a `/current` symlink which points to the latest release. Add domains that point into the `/current/public` directory, make sure SSL is activated. Re-run the deploy command, now there should be no errors.
 
 ## Defaults
 
@@ -86,8 +115,6 @@ This package sets default values for various settings.
 |web_path|`public/`|
 |file_backup_packages|`fileadmin`, `uploads` (excluding `_processed_` and `_temp_`)
 |file_backup_keep|`1`
-
-
 
 ## Recipes
 
@@ -110,101 +137,6 @@ Rsync file backups to remote host
 |backup_storage_file_keep| `3`
 
 ## Examples
-
-### Configuration files
-
-Files to put in git:
-
-* ```public/.htaccess```
-* ```public/typo3conf/LocalConfiguration.php``` (with production settings)
-* ```.env``` (overrides production settings)
-* ```public/typo3conf/AdditionalConfiguration.php``` (sets Conf vars from .env)
-
-
-#### .env
-
-This `.env` file contains typical ddev settings, that would have been set through `AdditionalConfiguration.php`.
-
-```yaml
-TYPO3_CONTEXT='Development/Local'
-INSTANCE='local'
-
-TYPO3_CONF_VARS__DB__Connections__Default__dbname='db'
-TYPO3_CONF_VARS__DB__Connections__Default__host='db'
-TYPO3_CONF_VARS__DB__Connections__Default__password='db'
-TYPO3_CONF_VARS__DB__Connections__Default__port='3306'
-TYPO3_CONF_VARS__DB__Connections__Default__user='db'
-
-TYPO3_CONF_VARS__BE__debug='true'
-TYPO3_CONF_VARS__BE__compressionLevel=0
-
-TYPO3_CONF_VARS__FE__debug='true'
-TYPO3_CONF_VARS__FE__compressionLevel=0
-TYPO3_CONF_VARS__FE__processor_path='/usr/bin'
-TYPO3_CONF_VARS__FE__processor_path_lzw='/usr/bin'
-
-TYPO3_CONF_VARS__MAIL__transport='smtp'
-TYPO3_CONF_VARS__MAIL__transport_smtp_server='localhost:1025'
-TYPO3_CONF_VARS__MAIL__transport_sendmail_command='/usr/local/bin/mailhog sendmail test@example.org --smtp-addr 127.0.0.1:1025'
-
-TYPO3_CONF_VARS__GFX__processor='/usr/bin/'
-TYPO3_CONF_VARS__GFX__processor='/usr/bin/'
-
-TYPO3_CONF_VARS__SYS__trustedHostsPattern='.*.*'
-TYPO3_CONF_VARS__SYS__devIPmask='*'
-TYPO3_CONF_VARS__SYS__displayErrors=1
-TYPO3_CONF_VARS__SYS__exceptionalErrors=12290
-TYPO3_CONF_VARS__SYS__sitename='MY SITE DDEV'
-```
-
-#### AdditionalConfiguration.php
-
-```php
-<?php
-
-/**
- * Parse environment variables into PHP global variables. Any '__' in a key will be interpreted as 'next array level'.
- * An example would be: TYPO3_CONF_VARS__DB__Connections__Default__dbname=some_db
- * Numeric values are converted to integers.
- *
- * @param array<string,string> $from the array which shall be watched for keys that are matching $allowedVariables
- * @param string[] $allowedVariables the names of variables in $GLOBALS that shall be imported
- */
-function setGlobalsFromStrings(array $from, array $allowedVariables)
-{
-    foreach ($from as $k => $v) {
-        $keyArr = explode('__', $k);
-        if (in_array($variable = array_shift($keyArr), $allowedVariables)) {
-            $finalKey = array_pop($keyArr);
-            for ($level = &$GLOBALS[$variable]; $nextLevel = array_shift($keyArr);) {
-                if (!isset($level[$nextLevel])) {
-                    $level[$nextLevel] = [];
-                }
-                $level = &$level[$nextLevel];
-            }
-            if ($v === 'bool(false)') {
-                $v = false;
-            } elseif ($v === 'bool(true)') {
-                $v = true;
-            } elseif (is_numeric($v)) {
-                $v = (int)$v;
-            }
-
-            $level[$finalKey] = $v;
-        }
-    }
-}
-
-/**
- * Sets environment variables from the shell environment of the user (e.g. used with docker --environment=), from
- * webserver's virtual host config, .htaccess (SetEnv), /etc/profile, .profile, .bashrc, ...
- * When a .env file and the composer package helhum/dotenv-connector is present, the values from .env are also present
- * in the environment at this stage.
- */
-setGlobalsFromStrings($_SERVER, ['TYPO3_CONF_VARS']);
-
-```
-
 
 ### Auto-Backup
 
