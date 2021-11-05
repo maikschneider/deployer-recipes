@@ -6,8 +6,8 @@ $vendorDir = substr(dirname(dirname(__DIR__)), -6, 6) === 'vendor' ? __DIR__ . '
 require_once($vendorDir . 'sourcebroker/deployer-loader/autoload.php');
 new \SourceBroker\DeployerExtendedTypo3\Loader();
 
-// require default deployer recipies
-require_once($vendorDir . 'deployer/recipes/recipe/slack.php');
+// install recipe from old deployer/recipes
+require_once(__DIR__ . '/recipe/slack.php');
 
 // install own recipes
 require_once(__DIR__ . '/recipe/defaults.php');
