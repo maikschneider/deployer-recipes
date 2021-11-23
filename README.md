@@ -75,11 +75,18 @@ Put this [.env](Documentation/.env) file in your project root. It contains typic
 
 Files to put in git:
 
+* ```deploy.php```
 * ```public/.htaccess```
 * ```public/typo3conf/LocalConfiguration.php``` (with production settings)
 * ```.env``` (overrides production settings)
 * ```public/typo3conf/AdditionalConfiguration.php``` (sets Conf vars from .env)
-* ```public/typo3conf/PackageStates.php```
+* ```public/typo3conf/PackageStates.php``` (not needed in v11+)
+
+Make sure that these files are not matched by your `.gitignore`. To add files that are excluded (like the ones inside the `public` directory), you can use the following command:
+
+```
+git add -f public/typo3conf/LocalConfiguration.php
+```
 
 ## 7. Run
 
