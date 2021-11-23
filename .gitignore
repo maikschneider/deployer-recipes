@@ -5,3 +5,4 @@ vendor
 .env
 .dep
 deploy.php
+!Documentation/.env

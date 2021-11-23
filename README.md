@@ -57,6 +57,10 @@ host('staging')
     ->set('bin/composer', '/usr/local/bin/composer')
     ->set('bin/php', '/usr/local/bin/php')
     ->set('deploy_path', '/home/www/p590044/html/typo3-staging');
+
+host('local')
+    ->hostname('local')
+    ->set('deploy_path', getcwd());
 ```
 
 ## 4. Create AdditinalConfiguration.php
