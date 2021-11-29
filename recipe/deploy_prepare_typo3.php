@@ -38,6 +38,12 @@ task('deploy:prepare:typo3', function () {
     $repoIp = runlocally('ping -q -c 1 -t 1 ' . $repoDomain . ' | grep PING | sed -e "s/).*//" | sed -e "s/.*(//"');
     if (!test('[[ $(ssh-keygen -F ' . $repoIp . ') ]]')) {
         writeln($repoDomain . ' is not not a known_host, generating key locally and adding it to {{hostname}}..');
+        $key = runLocally('ssh-keyscan -t rsa ' . $repoDomain . '');
+        run('echo "' . $key . '" >> ~/.ssh/known_hosts');
+        $key = runLocally('ssh-keyscan -t rsa -H ' . $repoDomain . '');
+        run('echo "' . $key . '" >> ~/.ssh/known_hosts');
+        $key = runLocally('ssh-keyscan -t rsa ' . $repoIp . '');
+        run('echo "' . $key . '" >> ~/.ssh/known_hosts');
         $key = runLocally('ssh-keyscan -t rsa -H ' . $repoIp . '');
         run('echo "' . $key . '" >> ~/.ssh/known_hosts');
     }
@@ -111,7 +117,7 @@ task('deploy:prepare:typo3', function () {
         $askForDatabase = askConfirmation('Do you want to enter them now?', true);
         if ($askForDatabase) {
             $databaseName = ask('Database name:');
-            $databaseHost = ask('Database host:', '');
+            $databaseHost = ask('Database host:', '127.0.0.1');
             $databasePort = ask('Database port:', '3306');
             $databaseUser = ask('Database username:');
             $databasePassword = askHiddenResponse('Database password:');
