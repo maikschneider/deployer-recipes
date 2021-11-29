@@ -142,4 +142,4 @@ task('deploy:prepare:typo3', function () {
 
         writeln('<info>Make sure ' . implode(',', get('public_urls')) . ' is pointing to {{deploy_path}}/current/public</info>');
     }
-});
+})->desc('Configure host for TYPO3 deployment: Access to repository, folder structure and database access');

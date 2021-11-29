@@ -10,8 +10,8 @@ new \SourceBroker\DeployerExtendedTypo3\Loader();
 require_once(__DIR__ . '/recipe/slack.php');
 
 // install own recipes
+require_once(__DIR__ . '/recipe/deploy_prepare_typo3.php');
 require_once(__DIR__ . '/recipe/defaults.php');
 require_once(__DIR__ . '/recipe/db_backup_rsync.php');
 require_once(__DIR__ . '/recipe/file_backup_rsync.php');
 require_once(__DIR__ . '/recipe/file_backup.php');
-require_once(__DIR__ . '/recipe/deploy_prepare_typo3.php');
