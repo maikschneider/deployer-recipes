@@ -8,6 +8,9 @@ set('driver_typo3cms', true);
 // always run language update
 before('deploy:symlink', 'typo3cms:language:update');
 
+// extend deploy:prepare to prepare remote host for typo3 install
+after('deploy:prepare', 'deploy:authorize:bitbucket');
+
 set('web_path', 'public/');
 
 set('composer_channel', 2);
