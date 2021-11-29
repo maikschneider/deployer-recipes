@@ -35,7 +35,7 @@ task('deploy:authorize:bitbucket', function () {
 
     // check bitbucket rsa access
     $repoDomain = substr(substr(get('repository'), 4), 0, (strpos(get('repository'), ':') - 4));
-    $repoIp = runlocally('dig +short ' . $repoDomain);
+    $repoIp = runlocally('ping -q -c 1 -t 1 ' . $repoDomain . ' | grep PING | sed -e "s/).*//" | sed -e "s/.*(//"');
     if (!test('[[ $(ssh-keygen -F ' . $repoIp . ') ]]')) {
         writeln('bitbucket.org is not not a known_host, generating key locally and adding it to {{hostname}}..');
         $key = runLocally('ssh-keyscan -t rsa -H ' . $repoIp . '');
