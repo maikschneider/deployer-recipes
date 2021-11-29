@@ -1,7 +1,10 @@
 .idea
 .ddev
 public
+!public/typo3conf/LocalConfiguration.php
+!public/typo3conf/AdditionalConfiguration.php
 vendor
 .env
 .dep
 !Documentation/.env
+var
