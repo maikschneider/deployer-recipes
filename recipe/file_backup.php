@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file overrides the file:backend command and the file_backup_path variable from sourcebroker/deployer-extended
+ * This file overrides the file:backup command and the file_backup_path variable from sourcebroker/deployer-extended
  * because it is not able to do create local backups, which is needed for our rsync
  */
 

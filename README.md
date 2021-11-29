@@ -132,6 +132,16 @@ Or start from scratch by adding an admin user:
 config:createadmin staging
 ```
 
+## 10. Configure remote instance
+
+If you configure the remote TYPO3 installation via Install Tool, make sure to add the changes to the git repository. To download the changes made to the `LocalConfiguration.php`, you can use the following command:
+
+```
+dep config:pull staging
+```
+
+If any of these changes break your local installation, just override the setting in your local `.env` file.
+
 ---
 
 ## Defaults
@@ -144,6 +154,8 @@ This package sets default values for various settings.
 |file_backup_packages|`fileadmin`, `uploads` (excluding `_processed_` and `_temp_`)
 |file_backup_keep|`1`
 
+---
+
 ## Recipes
 
 * `db:backup:rsync`
@@ -152,6 +164,7 @@ This package sets default values for various settings.
 * `slack:notify`
 * `deploy:prepare:typo3`
 * `deploy-fast`
+* `file:backup`
 
 ### db:backup:rsync
 
@@ -160,6 +173,11 @@ Rsync database backups to remote host.
 ### file:backup:rsync
 
 Rsync file backups to remote host
+
+|Setting|Default value
+|---|---
+|backup_storage_db_keep| `10`
+|backup_storage_file_keep| `3`
 
 ### config:pull
 
@@ -188,12 +206,13 @@ Unfortunately this package has to override the `deploy-fast` task of [sourcebrok
 
 Hopefully, this will change in the future. The discussion can be found [here](https://github.com/sourcebroker/deployer-extended-typo3/discussions/18). 
 
-## Settings
+### file:backup
 
-|Setting|Value
-|---|---
-|backup_storage_db_keep| `10`
-|backup_storage_file_keep| `3`
+This recipe overrides the `file:backup` command and the `file_backup_path` variable from [sourcebroker/deployer-extended](https://github.com/sourcebroker/deployer-extended) because it is not able to do create local backups, which is needed for our rsync.
+
+The pull request for this change is [still open](https://github.com/sourcebroker/deployer-extended/pull/13).
+
+---
 
 ## Examples
 
