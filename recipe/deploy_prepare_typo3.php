@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-task('deploy:authorize:bitbucket', function () {
+task('deploy:prepare:typo3', function () {
 
     // check stage
     if (empty(get('argument_stage'))) {
