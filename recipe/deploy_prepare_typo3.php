@@ -122,14 +122,6 @@ task('deploy:prepare:typo3', function () {
             run('echo "TYPO3_CONF_VARS__DB__Connections__Default__user=\'' . $databaseUser . '\'" >> {{deploy_path}}/shared/.env');
             run('echo "TYPO3_CONF_VARS__DB__Connections__Default__password=\'' . $databasePassword . '\'" >> {{deploy_path}}/shared/.env');
             run('echo "TYPO3_CONF_VARS__DB__Connections__Default__dbname=\'' . $databaseName . '\'" >> {{deploy_path}}/shared/.env');
-
-            run('echo "" >> {{deploy_path}}/shared/.env');
-            run('echo "# Copy configuration for deployer" >> {{deploy_path}}/shared/.env');
-            run('echo "TYPO3__DB__Connections__Default__dbname=\$TYPO3_CONF_VARS__DB__Connections__Default__dbname" >> {{deploy_path}}/shared/.env');
-            run('echo "TYPO3__DB__Connections__Default__host=\$TYPO3_CONF_VARS__DB__Connections__Default__host" >> {{deploy_path}}/shared/.env');
-            run('echo "TYPO3__DB__Connections__Default__password=\$TYPO3_CONF_VARS__DB__Connections__Default__password" >> {{deploy_path}}/shared/.env');
-            run('echo "TYPO3__DB__Connections__Default__port=\$TYPO3_CONF_VARS__DB__Connections__Default__port" >> {{deploy_path}}/shared/.env');
-            run('echo "TYPO3__DB__Connections__Default__user=\$TYPO3_CONF_VARS__DB__Connections__Default__user" >> {{deploy_path}}/shared/.env');
         }
     }
 
