@@ -33,11 +33,11 @@ task('deploy:authorize:bitbucket', function () {
         run('ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""');
     }
 
-    // check bitbucket rsa access
+    // check rsa fingerprint to repository
     $repoDomain = substr(substr(get('repository'), 4), 0, (strpos(get('repository'), ':') - 4));
     $repoIp = runlocally('ping -q -c 1 -t 1 ' . $repoDomain . ' | grep PING | sed -e "s/).*//" | sed -e "s/.*(//"');
     if (!test('[[ $(ssh-keygen -F ' . $repoIp . ') ]]')) {
-        writeln('bitbucket.org is not not a known_host, generating key locally and adding it to {{hostname}}..');
+        writeln($repoDomain . ' is not not a known_host, generating key locally and adding it to {{hostname}}..');
         $key = runLocally('ssh-keyscan -t rsa -H ' . $repoIp . '');
         run('echo "' . $key . '" >> ~/.ssh/known_hosts');
     }
@@ -65,12 +65,11 @@ task('deploy:authorize:bitbucket', function () {
     // abort if software is missing
     if (!empty($notInstalledProgramms)) {
         writeln('<error>The following programs are not installed: ' . implode($notInstalledProgramms) . '.</error>');
-        writeln('<comment>Please install the programs and re-run this command</comment>');
-        return;
+        writeln('<comment>Please install the programs before running a deployment</comment>');
     }
 
     // check for repository access
-    if (!test('git ls-remote -h {{repository}}')) {
+    if (test('[[ $(which git) ]]') && !test('git ls-remote -h {{repository}}')) {
         try {
             run('git ls-remote -h {{repository}}');
         } catch (\Deployer\Exception\RuntimeException $e) {
@@ -111,11 +110,11 @@ task('deploy:authorize:bitbucket', function () {
         writeln('<comment>No database credentials found .env file. </comment>');
         $askForDatabase = askConfirmation('Do you want to enter them now?', true);
         if ($askForDatabase) {
+            $databaseName = ask('Database name:');
             $databaseHost = ask('Database host:', '');
             $databasePort = ask('Database port:', '3306');
             $databaseUser = ask('Database username:');
             $databasePassword = askHiddenResponse('Database password:');
-            $databaseName = ask('Database name:');
 
             run('echo "" >> {{deploy_path}}/shared/.env');
             run('echo "TYPO3_CONF_VARS__DB__Connections__Default__host=\'' . $databaseHost . '\'" >> {{deploy_path}}/shared/.env');
