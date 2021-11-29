@@ -88,7 +88,7 @@ Make sure that these files are not matched by your `.gitignore`. To add files th
 git add -f public/typo3conf/LocalConfiguration.php
 ```
 
-## 7. Run
+## 6. (Optional) Configure your deployer command
 
 Make sure to run the ```dep``` command from within the ddev container, e.g. add an alias to your ```~/.bashrc``` or ```~/.zshrc```:
 
@@ -96,26 +96,43 @@ Make sure to run the ```dep``` command from within the ddev container, e.g. add 
 alias dep="ddev exec vendor/bin/dep"
 ```
 
-To create the folder structure on the remote host, run:
+## 7. Prepare the host machine
+
+Get ready to enter database credentials and configure the domain.
+
+To create the folder structure and configuration on the remote host, run:
 
 ```
-dep deploy:prepare staging
+dep deploy:prepare:typo3 staging
 ```
+
+Follow the wizard. If there are errors (e.g. missing software on host), fix the problems and re-run the command.
+
+Now change the path of the domain (the ones configured in ```public_urls```) to the working directory. The path is printed by the wizard. Activate SSL.
+
+## 8. Deploy
 
 Now you can create your first deployment with
 
 ```
-dep deploy staging
+dep deploy-fast staging
 ```
 
-This will checkout the repository on the remote host and create a release folder. You need to adjust the database credentials. To do this, ssh to the host and replace the `.env file` with [this one](Documentation/.env.mittwald) (rename it).
+## 9. Import database or start fresh
+
+You're basically done. Now you can decide whether you want to import your existing local database:
 
 ```
-dep ssh staging
-# make sure, you are in the /release, /current or /shared dir
-> vim .env
+dep db:push staging
 ```
-Exit and try again. Now there should be a `/current` symlink which points to the latest release. Add domains that point into the `/current/public` directory, make sure SSL is activated. Re-run the deploy command, now there should be no errors.
+
+Or start from scratch by adding an admin user:
+
+```
+config:createadmin staging
+```
+
+---
 
 ## Defaults
 
@@ -131,6 +148,10 @@ This package sets default values for various settings.
 
 * `db:backup:rsync`
 * `file:backup:rsync`
+* `config:pull`
+* `slack:notify`
+* `deploy:prepare:typo3`
+* `deploy-fast`
 
 ### db:backup:rsync
 
@@ -139,6 +160,33 @@ Rsync database backups to remote host.
 ### file:backup:rsync
 
 Rsync file backups to remote host
+
+### config:pull
+
+Download the `LocalConfiguration.php` from remote instance to local instance
+
+### slack:notify
+
+Notify slack channel on production deployment.
+
+Contains multiple slack recipes in order to get rid of the abandoned repo (could change in the future). To add a webhook to your slack channel, visit [this page](https://deployer.org/docs/7.x/contrib/slack) and click on "Add to Slack".
+
+### deploy:prepare:typo3
+
+Configures the host machine for the deployment of a TYPO3 base extension:
+
+* Can add your SSH key to remote machine
+* Checks for software dependencies
+* Add rsa fingerprint of git repository
+* Checks for correct repository access
+* Interactively create remote `.env` file with database credentials
+* Creates needed folder structure for domain configuration
+
+### deploy-fast
+
+Unfortunately this package has to override the `deploy-fast` task of [sourcebroker/deployer-extended-typo3](https://github.com/sourcebroker/deployer-extended-typo3). This is done to change the order of commands in order to prevent an exception during initial deployment.
+
+Hopefully, this will change in the future. The discussion can be found [here](https://github.com/sourcebroker/deployer-extended-typo3/discussions/18). 
 
 ## Settings
 
