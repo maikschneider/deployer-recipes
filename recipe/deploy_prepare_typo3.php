@@ -33,7 +33,7 @@ task('deploy:prepare:typo3', function () {
         run('ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""');
     }
 
-    // check rsa fingerprint to repository
+    // check rsa fingerprint of repository
     $repoDomain = substr(substr(get('repository'), 4), 0, (strpos(get('repository'), ':') - 4));
     $repoIp = runlocally('ping -q -c 1 -t 1 ' . $repoDomain . ' | grep PING | sed -e "s/).*//" | sed -e "s/.*(//"');
     if (!test('[[ $(ssh-keygen -F ' . $repoIp . ') ]]')) {
@@ -62,7 +62,7 @@ task('deploy:prepare:typo3', function () {
         }
     }
 
-    // abort if software is missing
+    // print missing software
     if (!empty($notInstalledProgramms)) {
         writeln('<error>The following programs are not installed: ' . implode($notInstalledProgramms) . '.</error>');
         writeln('<comment>Please install the programs before running a deployment</comment>');
@@ -91,7 +91,7 @@ task('deploy:prepare:typo3', function () {
         writeln('<info>.env file created</info>');
     }
 
-    // check for instance
+    // check for instance setting
     if (!test('[[ $(grep "INSTANCE=" {{deploy_path}}/shared/.env) ]]')) {
         writeln('<comment>No Instance set in .env file.</comment>');
         run('echo "INSTANCE=\'' . get('argument_stage') . '\'" >> {{deploy_path}}/shared/.env');
@@ -101,7 +101,7 @@ task('deploy:prepare:typo3', function () {
     // check for TYPO3 context
     if (!test('[[ $(grep "TYPO3_CONTEXT=" {{deploy_path}}/shared/.env) ]]')) {
         writeln('<comment>No TYPO3_CONTEXT set in .env file. </comment>');
-        $context = ask('Enter context name', 'Production');
+        $context = ask('Enter TYPO3 context name', 'Production');
         run('echo "TYPO3_CONTEXT=\'' . $context . '\'" >> {{deploy_path}}/shared/.env');
     }
 
@@ -125,7 +125,7 @@ task('deploy:prepare:typo3', function () {
         }
     }
 
-    // check current symlink
+    // check for current symlink
     if (!test('[ -d {{deploy_path}}/current ]')) {
         run('mkdir -p {{deploy_path}}/releases');
         run('mkdir -p {{deploy_path}}/releases/1');
