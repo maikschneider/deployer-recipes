@@ -34,9 +34,11 @@ task('deploy:authorize:bitbucket', function () {
     }
 
     // check bitbucket rsa access
-    if (!test('[[ $(ssh-keygen -F bitbucket.org) ]]')) {
+    $repoDomain = substr(substr(get('repository'), 4), 0, (strpos(get('repository'), ':') - 4));
+    $repoIp = runlocally('dig +short ' . $repoDomain);
+    if (!test('[[ $(ssh-keygen -F ' . $repoIp . ') ]]')) {
         writeln('bitbucket.org is not not a known_host, generating key locally and adding it to {{hostname}}..');
-        $key = runLocally('ssh-keyscan -t rsa -H bitbucket.org');
+        $key = runLocally('ssh-keyscan -t rsa -H ' . $repoIp . '');
         run('echo "' . $key . '" >> ~/.ssh/known_hosts');
     }
 
@@ -51,29 +53,38 @@ task('deploy:authorize:bitbucket', function () {
         $notInstalledProgramms[] = 'composer (version 2.x)';
     }
 
+    // check composer version
     if (test('[[ $(which composer) ]]')) {
         $composerVersion = run('composer --version 2>/dev/null | egrep -o "([0-9]{1,}\.)+[0-9]{1,}"');
-        $composerVersion = explode('.', $composerVersion);
-        if ((int)$composerVersion[0] !== 2) {
-            $notInstalledProgramms[] = 'composer (version 2.x)';
+        $composerVersions = explode('.', $composerVersion);
+        if ((int)$composerVersions[0] !== 2) {
+            $notInstalledProgramms[] = 'composer (version 2.x, currently installed: ' . $composerVersion . ')';
         }
     }
 
+    // abort if software is missing
     if (!empty($notInstalledProgramms)) {
-        writeln('The following programs are not installed: ' . implode($notInstalledProgramms) . '.');
-        writeln('Please install the programs and re-run this command');
+        writeln('<error>The following programs are not installed: ' . implode($notInstalledProgramms) . '.</error>');
+        writeln('<comment>Please install the programs and re-run this command</comment>');
         return;
     }
 
-    // check repository access
-    writeln('{{repository}}');
+    // check for repository access
+    if (!test('git ls-remote -h {{repository}}')) {
+        try {
+            run('git ls-remote -h {{repository}}');
+        } catch (\Deployer\Exception\RuntimeException $e) {
+            $noAccess = strpos($e, 'Permission denied (publickey)');
+            if ($noAccess) {
+                writeln('<error>Error: "Permission denied (publickey)"</error>');
+                writeln('<comment>Please grant "{{hostname}}" access to the git repository {{repository}} and re-run the command.</comment>');
+                writeln('This is the public key of the host:');
+                writeln(run('cat ~/.ssh/id_rsa.pub'));
+                return;
+            }
 
-    run('git ls-remote -h {{repository}}');
-
-    //$key = runLocally('ssh-keygen -F bitbucket.org || ssh-keyscan -t rsa -H bitbucket.org');
-
-    //test()
-
-    //run('echo "' . $key . '" >> ~/.ssh/known_host');
+            writeln('Unkown error. Could not access {{repository}}. Aborting.');
+        }
+    }
 
 });
