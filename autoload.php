@@ -16,3 +16,4 @@ require_once(__DIR__ . '/recipe/db_backup_rsync.php');
 require_once(__DIR__ . '/recipe/file_backup_rsync.php');
 require_once(__DIR__ . '/recipe/file_backup.php');
 require_once(__DIR__ . '/recipe/config_pull.php');
+require_once(__DIR__ . '/recipe/deploy_fast.php');
