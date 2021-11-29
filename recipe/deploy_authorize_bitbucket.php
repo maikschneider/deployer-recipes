@@ -77,13 +77,52 @@ task('deploy:authorize:bitbucket', function () {
             $noAccess = strpos($e, 'Permission denied (publickey)');
             if ($noAccess) {
                 writeln('<error>Error: "Permission denied (publickey)"</error>');
-                writeln('<comment>Please grant "{{hostname}}" access to the git repository {{repository}} and re-run the command.</comment>');
-                writeln('This is the public key of the host:');
+                writeln('<comment>Please grant "{{hostname}}" access to the git repository {{repository}} and re-run the command. This is the public key of the host:</comment>');
                 writeln(run('cat ~/.ssh/id_rsa.pub'));
-                return;
+            } else {
+                writeln('<error>Unknown error. Could not access {{repository}}.</error>');
             }
+        }
+    }
 
-            writeln('Unkown error. Could not access {{repository}}. Aborting.');
+    // check for .env file
+    if (!test('[ -f {{deploy_path}}/shared/.env ]')) {
+        writeln('<comment>No .env file found in "{{deploy_path}}/shared/".</comment>');
+        run('touch {{deploy_path}}/shared/.env');
+        writeln('<info>.env file created</info>');
+    }
+
+    // check for instance
+    if (!test('[[ $(grep "INSTANCE=" {{deploy_path}}/shared/.env) ]]')) {
+        writeln('<comment>No Instance set in .env file.</comment>');
+        run('echo "INSTANCE=\'' . get('argument_stage') . '\'" >> {{deploy_path}}/shared/.env');
+        writeln('<info>Instance set to "{{argument_stage}}"</info>');
+    }
+
+    // check for TYPO3 context
+    if (!test('[[ $(grep "TYPO3_CONTEXT=" {{deploy_path}}/shared/.env) ]]')) {
+        writeln('<comment>No TYPO3_CONTEXT set in .env file. </comment>');
+        $context = ask('Enter context name', 'Production');
+        run('echo "TYPO3_CONTEXT=\'' . $context . '\'" >> {{deploy_path}}/shared/.env');
+    }
+
+    // check for database credentials
+    if (!test('[[ $(grep "TYPO3_CONF_VARS__DB__Connections__Default__dbname=" {{deploy_path}}/shared/.env) ]]')) {
+        writeln('<comment>No database credentials found .env file. </comment>');
+        $askForDatabase = askConfirmation('Do you want to enter them now?', true);
+        if ($askForDatabase) {
+            $databaseHost = ask('Database host:', '');
+            $databasePort = ask('Database port:', '3306');
+            $databaseUser = ask('Database username:');
+            $databasePassword = askHiddenResponse('Database password:');
+            $databaseName = ask('Database name:');
+
+            run('echo "" >> {{deploy_path}}/shared/.env');
+            run('echo "TYPO3_CONF_VARS__DB__Connections__Default__host=\'' . $databaseHost . '\'" >> {{deploy_path}}/shared/.env');
+            run('echo "TYPO3_CONF_VARS__DB__Connections__Default__port=\'' . $databasePort . '\'" >> {{deploy_path}}/shared/.env');
+            run('echo "TYPO3_CONF_VARS__DB__Connections__Default__user=\'' . $databaseUser . '\'" >> {{deploy_path}}/shared/.env');
+            run('echo "TYPO3_CONF_VARS__DB__Connections__Default__password=\'' . $databasePassword . '\'" >> {{deploy_path}}/shared/.env');
+            run('echo "TYPO3_CONF_VARS__DB__Connections__Default__dbname=\'' . $databaseName . '\'" >> {{deploy_path}}/shared/.env');
         }
     }
 
