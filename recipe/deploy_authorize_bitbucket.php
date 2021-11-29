@@ -133,4 +133,14 @@ task('deploy:authorize:bitbucket', function () {
             run('echo "TYPO3__DB__Connections__Default__user=\$TYPO3_CONF_VARS__DB__Connections__Default__user" >> {{deploy_path}}/shared/.env');
         }
     }
+
+    // check current symlink
+    if (!test('[ -d {{deploy_path}}/current ]')) {
+        run('mkdir -p {{deploy_path}}/releases');
+        run('mkdir -p {{deploy_path}}/releases/1');
+        run('mkdir -p {{deploy_path}}/releases/1/public');
+        run('ln -sfn {{deploy_path}}/releases/1/public {{deploy_path}}/current');
+
+        writeln('<info>Make sure ' . implode(',', get('public_urls')) . ' is pointing to {{deploy_path}}/current/public</info>');
+    }
 });
