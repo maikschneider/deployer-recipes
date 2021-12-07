@@ -136,7 +136,7 @@ task('deploy:prepare:typo3', function () {
         run('mkdir -p {{deploy_path}}/releases');
         run('mkdir -p {{deploy_path}}/releases/1');
         run('mkdir -p {{deploy_path}}/releases/1/public');
-        run('ln -sfn {{deploy_path}}/releases/1/public {{deploy_path}}/current');
+        run('ln -sfn {{deploy_path}}/releases/1 {{deploy_path}}/current');
 
         writeln('<info>Make sure ' . implode(',', get('public_urls')) . ' is pointing to {{deploy_path}}/current/public</info>');
     }
