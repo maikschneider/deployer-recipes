@@ -129,7 +129,7 @@ dep db:push staging
 Or start from scratch by adding an admin user:
 
 ```
-config:createadmin staging
+dep config:createadmin staging
 ```
 
 ## 10. Configure remote instance
@@ -252,7 +252,6 @@ The pull request for this change is [still open](https://github.com/sourcebroker
               - .env
             script:
               - composer install --no-ansi --no-interaction --no-progress --no-scripts --ignore-platform-reqs
-              - mv .env.mittwald .env
     
     pipelines:
       custom:
