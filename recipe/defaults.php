@@ -45,4 +45,22 @@ set('db_dumpclean_keep', [
     '*' => 2
 ]);
 
-task('deploy:check_branch_local', function(){});
+task('deploy:check_branch_local', function () {
+});
+
+set('writable_dirs', function () {
+    return [
+        get('web_path') . 'typo3conf',
+        get('web_path') . 'typo3temp',
+        get('web_path') . 'uploads',
+        get('web_path') . 'fileadmin',
+        get('web_path') . '../var',
+    ];
+});
+
+task('deploy:fix-shared-permissions', function () {
+    foreach (get('shared_dirs') ?? [] as $dir) {
+        run('find {{deploy_path}}/shared/' . $dir . ' -type d -exec chmod ' . get('writable_chmod_mode') . ' {} +');
+    }
+});
+after('deploy:shared', 'deploy:fix-shared-permissions');
