@@ -25,7 +25,8 @@ task('deploy:prepare:feature', function () {
     run('cp ' . $featureRootPath . '/.env {{deploy_path}}/shared/');
 
     // set database name
-    run('echo "TYPO3_CONF_VARS__DB__Connections__Default__dbname=\'' . $branch . '\'" >> {{deploy_path}}/shared/.env');
+    $dbName = str_replace('-', '', $branch);
+    run('echo "TYPO3_CONF_VARS__DB__Connections__Default__dbname=\'' . $dbName . '\'" >> {{deploy_path}}/shared/.env');
 
     // set TYPO3_BASE domain
     foreach (get('public_urls') as $url) {
@@ -36,7 +37,7 @@ task('deploy:prepare:feature', function () {
     $dbUser = run('grep TYPO3_CONF_VARS__DB__Connections__Default__user {{deploy_path}}/shared/.env | cut -d "=" -f2 | cut -c2- | rev | cut -c2- | rev');
     $dbHost = run('grep TYPO3_CONF_VARS__DB__Connections__Default__host {{deploy_path}}/shared/.env | cut -d "=" -f2 | cut -c2- | rev | cut -c2- | rev');
     $dbPassword = run('grep TYPO3_CONF_VARS__DB__Connections__Default__password {{deploy_path}}/shared/.env | cut -d "=" -f2 | cut -c2- | rev | cut -c2- | rev');
-    $sqlStatement = 'CREATE DATABASE IF NOT EXISTS ' . $branch;
+    $sqlStatement = 'CREATE DATABASE IF NOT EXISTS ' . $dbName;
     run('echo "' . $sqlStatement . '" | mariadb -u ' . $dbUser . ' -h ' . $dbHost . ' --password="' . $dbPassword . '"');
 })->onStage('feature');
 
