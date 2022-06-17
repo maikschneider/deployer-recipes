@@ -2,6 +2,8 @@
 
 namespace Deployer;
 
+use Deployer\Exception\GracefulShutdownException;
+
 task('deploy:prepare:feature', function () {
 
     // abort if feature branch has already been configured
