@@ -6,13 +6,19 @@ use Deployer\Exception\GracefulShutdownException;
 
 task('deploy:prepare:feature', function () {
 
+    $featureRootPath = get('deploy_path');
+    $branch = get('branch');
+
+    // override path & public url
+    set('deploy_path', $featureRootPath . '/' . $branch);
+    set('public_urls', array_map(function ($url) use ($branch) {
+        return $url . '/' . $branch . '/current/public';
+    }, get('public_urls')));
+
     // abort if feature branch has already been configured
     if (test('[ -f {{deploy_path}}/.dep/releases.extended ]')) {
         return;
     }
-
-    $featureRootPath = get('deploy_path');
-    $branch = get('branch');
 
     // create shared dir
     run('mkdir -p {{ deploy_path }}');
@@ -76,5 +82,4 @@ before('db:rmdump', 'override-paths');
 
 // adjustments for deploy-fast
 before('deploy:prepare', 'deploy:prepare:feature');
-before('deploy:prepare:feature', 'override-paths');
 before('deploy:extend_log', 'db:import:feature');
