@@ -73,6 +73,6 @@ before('db:import', 'override-paths');
 before('db:rmdump', 'override-paths');
 
 // adjustments for deploy-fast
-before('deploy:check_lock', 'override-paths');
 before('deploy:prepare', 'deploy:prepare:feature');
+before('deploy:prepare:feature', 'override-paths');
 before('deploy:extend_log', 'db:import:feature');
