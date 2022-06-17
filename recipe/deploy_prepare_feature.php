@@ -77,7 +77,6 @@ task('db:truncate', function () {
 
 // adjustments for db:copy path
 before('db:upload', 'override-paths');
-before('db:import', 'override-paths');
 before('db:rmdump', 'override-paths');
 
 // adjustments for deploy-fast
