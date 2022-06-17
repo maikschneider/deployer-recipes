@@ -67,10 +67,12 @@ task('override-paths', function () {
 task('db:truncate', function () {
 })->onStage('feature');
 
+// adjustments for db:copy path
 before('db:upload', 'override-paths');
 before('db:import', 'override-paths');
 before('db:rmdump', 'override-paths');
-before('deploy:prepare', 'override-paths');
-before('deploy:extend_log', 'db:import:feature');
 
+// adjustments for deploy-fast
+before('deploy:check_lock', 'override-paths');
 before('deploy:prepare', 'deploy:prepare:feature');
+before('deploy:extend_log', 'db:import:feature');
