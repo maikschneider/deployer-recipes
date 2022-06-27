@@ -48,6 +48,7 @@ set('db_dumpclean_keep', [
 task('deploy:check_branch_local', function () {
 });
 
+// fix permissions in xima server environment
 set('writable_dirs', function () {
     return [
         get('web_path') . 'typo3conf',
@@ -55,12 +56,10 @@ set('writable_dirs', function () {
         get('web_path') . 'uploads',
         get('web_path') . 'fileadmin',
         get('web_path') . '../var',
+        get('web_path') . 'fileadmin/_processed_',
     ];
 });
-
-task('deploy:fix-shared-permissions', function () {
-    foreach (get('shared_dirs') ?? [] as $dir) {
-        run('find {{deploy_path}}/shared/' . $dir . ' -type d -exec chmod ' . get('writable_chmod_mode') . ' {} +');
-    }
+task('deploy:createMissingFolder', function () {
+    run('mkdir -p {{deploy_path}}/shared/public/fileadmin/_processed_');
 });
-after('deploy:shared', 'deploy:fix-shared-permissions');
+after('deploy:shared', 'deploy:createMissingFolder');
