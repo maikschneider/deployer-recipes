@@ -53,13 +53,17 @@ set('writable_dirs', function () {
     return [
         get('web_path') . 'typo3conf',
         get('web_path') . 'typo3temp',
+        get('web_path') . 'typo3temp/assets',
+        get('web_path') . 'typo3temp/assets/images',
+        get('web_path') . 'typo3temp/assets/_processed_',
         get('web_path') . 'uploads',
         get('web_path') . 'fileadmin',
         get('web_path') . '../var',
         get('web_path') . 'fileadmin/_processed_',
     ];
 });
-task('deploy:createMissingFolder', function () {
+task('deploy:createMissingFolderAndPermissions', function () {
     run('mkdir -p {{deploy_path}}/shared/public/fileadmin/_processed_');
+    run('chmod 660 {{deploy_path}}/public/typo3conf/LocalConfiguration.php');
 });
-after('deploy:shared', 'deploy:createMissingFolder');
+after('deploy:shared', 'deploy:createMissingFolderAndPermissions');
