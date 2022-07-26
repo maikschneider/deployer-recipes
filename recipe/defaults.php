@@ -64,6 +64,7 @@ set('writable_dirs', function () {
 });
 task('deploy:createMissingFolderAndPermissions', function () {
     run('mkdir -p {{deploy_path}}/shared/public/fileadmin/_processed_');
-    run('chmod 660 {{deploy_path}}/public/typo3conf/LocalConfiguration.php');
+    $remotePath = get('deploy_path') . '/' . (test('[ -L {{deploy_path}}/release ]') ? 'release' : 'current');
+    run('chmod 660 ' . $remotePath . '/public/typo3conf/LocalConfiguration.php');
 });
 after('deploy:shared', 'deploy:createMissingFolderAndPermissions');
