@@ -8,6 +8,7 @@ new \SourceBroker\DeployerExtendedTypo3\Loader();
 
 // install recipe from old deployer/recipes
 require_once(__DIR__ . '/recipe/slack.php');
+require_once(__DIR__ . '/recipe/ms-teams.php');
 
 // install own recipes
 require_once(__DIR__ . '/recipe/deploy_prepare_typo3.php');
