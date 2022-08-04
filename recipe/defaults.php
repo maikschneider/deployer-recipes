@@ -37,10 +37,8 @@ after('success', 'slack:notify:success');
 after('deploy:failed', 'slack:notify:failure');
 
 // ms teams config
-task('teams:notify')->onStage('production');
 task('teams:notify:failure')->onStage('production');
-before('deploy', 'teams:notify');
-after('deploy:success', 'teams:notify:success');
+after('success', 'teams:notify:success');
 after('deploy:failed', 'teams:notify:failure');
 
 set('branch', 'master');
