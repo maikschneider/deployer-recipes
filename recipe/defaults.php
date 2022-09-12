@@ -66,6 +66,7 @@ set('writable_dirs', function () {
         get('web_path') . '../var',
         get('web_path') . '../var/log',
         get('web_path') . '../var/transient',
+        get('web_path') . '../var/xm_kesearch_remote',
         get('web_path') . 'fileadmin/_processed_',
     ];
 });
