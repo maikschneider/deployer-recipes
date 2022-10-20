@@ -6,7 +6,7 @@ namespace Deployer;
 set('driver_typo3cms', true);
 
 // always run language update
-before('deploy:symlink', 'typo3cms:language:update');
+after('deploy:vendors', 'typo3cms:language:update');
 
 // execute normal prepare before doing custom typo3 stuff
 before('deploy:prepare:typo3', 'deploy:prepare');
