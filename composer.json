@@ -19,16 +19,9 @@
       "role": "Developer"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/maikschneider/deployer-extended-database"
-    }
-  ],
   "require": {
-    "sourcebroker/deployer-extended-typo3": "17.0.0",
-    "spooner/deployer-information": "1.3.0",
-    "sourcebroker/deployer-extended-database": "dev-fix/use-php-executable as 13.0.2"
+    "sourcebroker/deployer-extended-typo3": "19.0.0",
+    "spooner/deployer-information": "1.3.0"
   },
   "config": {
     "allow-plugins": {
